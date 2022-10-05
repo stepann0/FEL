@@ -1,0 +1,27 @@
+def compare(s1, op, s2):
+    if op == '<':
+        return s1 < s2
+    elif op == '>':
+        return s1 > s2
+    elif op == '<=':
+        return s1 <= s2
+    elif op == '>=':
+        return s1 >= s2
+    elif op == '==':
+        return s1 == s2
+    elif op == '!=':
+        return s1 != s2
+
+def bin_op(s1, op, s2):
+    if op == '+':
+        return s1 + s2
+    elif op == '-':
+        return s1 - s2
+    elif op == '*':
+        return s1 * s2
+    elif op == '/':
+        return s1 / s2
+    elif op == '%':
+        return s1 % s2
+    elif op == '^':
+        return s1 ** s2
