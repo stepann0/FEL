@@ -86,7 +86,7 @@ def t_INT(t):
 
 exponent_part = r"""([eE][-+]?\d+)"""
 fractional_constant = r"""(\d*\.\d+)|(\d+\.)"""
-floating_constant = '(((('+fractional_constant+')'+exponent_part+'?)|(\d+'+exponent_part+')))'
+floating_constant = "(((("+fractional_constant+")"+exponent_part+"?)|(\d+"+exponent_part+")))"
 @TOKEN(floating_constant)
 def t_FLOAT(t):
     t.value = float(t.value)
