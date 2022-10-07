@@ -1,4 +1,5 @@
 import ply.lex as lex
+from ply.lex import TOKEN
 
 reserved = {
    'if' : 'IF',
@@ -12,7 +13,8 @@ reserved = {
 }
 
 tokens = [
-   'NUMBER',
+   'INT',
+   'FLOAT',
    'PLUS',
    'MINUS',
    'MULT',
@@ -77,9 +79,17 @@ def t_ID(t):
     t.type = reserved.get(t.value,'ID') # Check for reserved words
     return t
 
-def t_NUMBER(t):
+def t_INT(t):
     r'\d+'
     t.value = int(t.value)    
+    return t
+
+exponent_part = r"""([eE][-+]?\d+)"""
+fractional_constant = r"""(\d*\.\d+)|(\d+\.)"""
+floating_constant = '(((('+fractional_constant+')'+exponent_part+'?)|(\d+'+exponent_part+')))'
+@TOKEN(floating_constant)
+def t_FLOAT(t):
+    t.value = float(t.value)
     return t
 
 def t_newline(t):
@@ -91,19 +101,4 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-# Build the lexer
 lexer = lex.lex()
-
-# data = '''
-# sum(2, 3, 4, 5)
-# '''
-
-# # Give the lexer some input
-# lexer.input(data)
-
-# # Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok: 
-#         break      # No more input
-#     print(tok)
