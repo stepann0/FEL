@@ -28,6 +28,12 @@ def p_expression_bin_operator(p):
 
     p[0] = exec.bin_op(p[1], p[2], p[3])
 
+def p_expression(p):
+    """expression : comparison
+                  | func_call
+                  | paren_expression"""
+    p[0] = p[1]
+
 def p_comparison(p):
     """comparison : expression LT expression
                   | expression GT expression
@@ -37,12 +43,6 @@ def p_comparison(p):
                   | expression NOT_EQ expression"""
 
     p[0] = exec.compare(p[1], p[2], p[3])
-
-def p_expression(p):
-    """expression : comparison
-                  | func_call
-                  | paren_expression"""
-    p[0] = p[1]
 
 def p_expression_un_operator(p):
     """expression : MINUS expression
@@ -94,8 +94,8 @@ def p_unary_range_param(p):
 
 
 def p_range(p):
-    """range : range_param RANGE range_param
-             | range_param RANGE range_param COLON range_param"""
+    """range : range_param COLON range_param
+             | range_param COLON range_param COLON range_param"""
     if len(p) == 4: # start..stop
         p[0] = exec.sequence(p[1], p[3])
     else: # start..stop:step
@@ -112,12 +112,3 @@ def p_error(p):
 
 # Build the parser
 parser = yacc.yacc()
-
-# while True:
-#    try:
-#        s = input("calc > ")
-#    except EOFError:
-#        break
-#    if not s: continue
-#    result = parser.parse(s)
-#    print(result)

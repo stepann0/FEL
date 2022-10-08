@@ -29,7 +29,7 @@ tokens = [
    'LSQUARE',
    'RSQUARE',
 
-   'RANGE',
+#    'RANGE',
    'COMMA',
    'COLON',
    'SEMI',
@@ -59,7 +59,7 @@ t_RBRACE  = r'\}'
 t_LSQUARE = r'\['
 t_RSQUARE = r'\]'
 
-t_RANGE   = r'\.\.'
+# t_RANGE   = r'\.\.'
 t_COMMA   = r','
 t_COLON   = r':'
 t_SEMI    = r';'
@@ -74,9 +74,13 @@ t_NOT_EQ  = r'!='
 t_STRING  = r'".*"'
 t_ignore  = ' \t'
 
-def t_ID(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID') # Check for reserved words
+# float regexps are taken from https://github.com/eliben/pycparser/blob/master/pycparser/c_lexer.py
+exponent_part = r"""([eE][-+]?[0-9]+)"""
+fractional_constant = r"""([0-9]*\.[0-9]+)|([0-9]+\.)"""
+floating_constant = '(((('+fractional_constant+')'+exponent_part+'?)|([0-9]+'+exponent_part+'))[FfLl]?)'
+@TOKEN(floating_constant)
+def t_FLOAT(t):
+    t.value = float(t.value)
     return t
 
 def t_INT(t):
@@ -84,12 +88,9 @@ def t_INT(t):
     t.value = int(t.value)    
     return t
 
-exponent_part = r"""([eE][-+]?\d+)"""
-fractional_constant = r"""(\d*\.\d+)|(\d+\.)"""
-floating_constant = "(((("+fractional_constant+")"+exponent_part+"?)|(\d+"+exponent_part+")))"
-@TOKEN(floating_constant)
-def t_FLOAT(t):
-    t.value = float(t.value)
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reserved.get(t.value,'ID') # Check for reserved words
     return t
 
 def t_newline(t):
