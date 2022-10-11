@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lexer import tokens
 import exec
+import numpy as np
 
 # precedence = (
 #     ("left", "OR"),
@@ -12,9 +13,13 @@ import exec
 #     ("right", "POW")
 # )
 
-def p_expression(p):
+def p_expression_disj(p):
     """expression : disjunction"""
     p[0] = p[1]
+
+def p_expression_if_else(p):
+    """expression : disjunction IF disjunction ELSE expression"""
+    p[0] = p[1] if p[3] else p[5]
 
 def p_disjunction(p):
     """disjunction : disjunction OR conjunction
@@ -135,11 +140,19 @@ def p_atom_parenth_expr(p):
 
 def p_atom_array(p):
     """atom : array"""
+    p[0] = np.array(p[1])
+
+def p_atom_func_call(p):
+    """atom : func_call"""
     p[0] = p[1]
 
 def p_array(p):
     """array : LSQUARE expression_list RSQUARE"""
     p[0] = p[2]
+
+def p_func_call(p):
+    """func_call : ID LPAREN expression_list RPAREN"""
+    p[0] = exec.call_func(p[1], p[3])
 
 def p_expression_list(p):
     """expression_list : expression_list COMMA expression

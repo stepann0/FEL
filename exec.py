@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 def error(msg):
     print("\033[31m"+"Error: "+msg+"\033[0m")
@@ -38,7 +38,7 @@ def sequence_step(start, stop, step):
     try:
         return list(range(start, stop, step))
     except Exception:
-        error(f"can't generate range {start}..{stop}:{step}.")
+        error(f"can't generate range {start}:{stop}:{step}.")
 
 def sequence(start, stop):
     step = 1
@@ -47,21 +47,19 @@ def sequence(start, stop):
     return sequence_step(start, stop, step)
     
 def sum_arr(arr):
-    if len(arr) == 1 and isinstance(arr[0], list):
-        arr = arr[0] 
-    try:
-        return sum(arr)
-    except Exception:
-        error(f"can't sum arr {arr}.")
+    return np.sum(arr)
 
 def call_func(func_id, args):
     try:
-        return FUNCTIONS[func_id](args)
-    except Exception:
-        error(f"some kind of error was occured when calling the function '{func_id}'")
+        return FUNCTIONS[func_id](*args)
+    except (TypeError, ValueError):
+        error(f"error on function '{func_id}' arguments")
+    except KeyError:
+        error(f"function '{func_id}' not implemented")
 
 FUNCTIONS = {
     "sum": sum_arr,
-    "sin": math.sin,
-    "cos": math.cos
+    "avr": np.average,
+    "sin": np.sin,
+    "cos": np.cos
 }
