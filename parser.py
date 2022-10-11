@@ -12,103 +12,133 @@ precedence = (
     ("right", "POW")
 )
 
-def p_statmenet(p):
-    """statment : expression
-                | array_literal
-                | range"""
+def p_expression(p):
+    """expression : disjunction"""
     p[0] = p[1]
 
-def p_expression_bin_operator(p):
-    """expression : expression PLUS expression
-                  | expression MINUS expression
-                  | expression MULT expression
-                  | expression DIVIDE expression
-                  | expression MOD expression
-                  | expression POW expression"""
+def p_disjunction(p):
+    """disjunction : disjunction OR conjunction
+                   | conjunction"""
+    if len(p) == 3:
+        p[0] = p[1] or p[2]
+    else:
+        p[0] = p[1]
 
-    p[0] = exec.bin_op(p[1], p[2], p[3])
+def p_conjuction(p):
+    """conjunction : conjunction AND inversion
+                   | inversion"""
+    if len(p) == 4:
+        p[0] = p[1] and p[3]
+    else:
+        p[0] = p[1]
 
-def p_expression(p):
-    """expression : comparison
-                  | func_call
-                  | paren_expression"""
+def p_invertion(p):
+    """inversion : NOT inversion 
+                 | comparison"""
+    if len(p) == 3:
+        p[0] = not p[2]
+    else:
+        p[0] = p[1]
+
+def p_comp_operator(p):
+    """COMP_OP : EQEQ
+            | NOT_EQ
+            | LE
+            | LT
+            | GE
+            | GT
+            | IN
+            | IS"""
     p[0] = p[1]
 
 def p_comparison(p):
-    """comparison : expression LT expression
-                  | expression GT expression
-                  | expression LE expression
-                  | expression GE expression
-                  | expression EQEQ expression
-                  | expression NOT_EQ expression"""
+    """comparison : comparison COMP_OP bitwise_or
+                  | bitwise_or"""
+    if len(p) == 4:
+        p[0] = exec.compare(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
 
-    p[0] = exec.compare(p[1], p[2], p[3])
+def p_bit_or(p):
+    """bitwise_or : bitwise_or BIT_OR bitwise_xor 
+                  | bitwise_xor"""
+    if len(p) == 4:
+        p[0] = p[1] | p[3]
+    else:
+        p[0] = p[1]
 
-def p_expression_un_operator(p):
-    """expression : MINUS expression
-                  | PLUS expression"""
-    p[0] = -p[2] if p[1] == "-" else p[2]
+def p_bit_xor(p):
+    """bitwise_xor : bitwise_xor BIT_XOR bitwise_and 
+                   | bitwise_and"""
+    if len(p) == 4:
+        p[0] = p[1] ^ p[3]
+    else:
+        p[0] = p[1]
 
-def p_paren_expression(p):
-    "paren_expression : LPAREN expression RPAREN"
-    p[0] = p[2]
+def p_statment_list(p):
+    """bitwise_and : bitwise_and BIT_AND sum 
+                   | sum"""
+    if len(p) == 4:
+        p[0] = p[1] & p[3]
+    else:
+        p[0] = p[1]
 
-def p_expression_bool(p):
-    """expression : TRUE 
-                  | FALSE"""
-    p[0] = p[1] == "true"
+def p_sum(p):
+    """sum : sum PLUS term 
+           | sum MINUS term 
+           | term"""
+    if len(p) == 4:
+        p[0] = exec.bin_op(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
 
-def p_expression_num(p):
-    "expression : NUMBER"
-    p[0] = p[1]
+def p_term(p):
+    """term : term MULT factor 
+            | term DIVIDE factor 
+            | term MOD factor 
+            | factor"""
+    if len(p) == 4:
+        p[0] = exec.bin_op(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
+
+
+def p_factor(p):
+    """factor : PLUS factor 
+              | MINUS factor 
+              | power"""
+    if len(p) == 3:
+        p[0] = -p[2] if p[1] == "-" else p[2]
+    else:
+        p[0] = p[1]
+
+def p_pow(p):
+    """power : atom POW factor
+             | atom"""
+    if len(p) == 4:
+        p[0] = p[1] ** p[3]
+    else:
+        p[0] = p[1]
+
+def p_atom(p):
+    """atom : NUMBER
+            | TRUE 
+            | FALSE
+            | LPAREN expression RPAREN"""
+
+    if len(p) == 4:
+        p[0] = p[2]
+    else:
+        p[0] = p[1]
 
 def p_number(p):
     """NUMBER : INT
               | FLOAT"""
     p[0] = p[1]
 
-def p_func_call(p):
-    """func_call : ID LPAREN statment_list RPAREN"""
-    p[0] = exec.call_func(p[1], p[3])
-
-def p_statment_list(p):
-    """statment_list : statment_list COMMA statment
-                     | statment
-                     |"""
-    if len(p) == 1: # no args
-        p[0] = None
-    elif len(p) == 2: # one arg
-        p[0] = [p[1]]
-    else: # 2+ args, separated by ","
-        p[0] = [*p[1], p[3]]
-
-def p_range_param(p):
-    """range_param : INT
-                   | paren_expression"""
-    p[0] = p[1]
-
-def p_unary_range_param(p):
-    """range_param : MINUS range_param
-                   | PLUS range_param"""
-    p[0] = -p[2] if p[1] == "-" else p[2]
-
-
-def p_range(p):
-    """range : range_param COLON range_param
-             | range_param COLON range_param COLON range_param"""
-    if len(p) == 4: # start..stop
-        p[0] = exec.sequence(p[1], p[3])
-    else: # start..stop:step
-        p[0] = exec.sequence_step(p[1], p[3], p[5])
-
-def p_array_literal(p):
-    """array_literal : LSQUARE statment_list RSQUARE"""
-    p[0] = p[2]
-
 # Error rule for syntax errors
 def p_error(p):
     print(f"{' '*p.lexpos}^")
     exec.error("syntax error:")
 
-# Build the parser
 parser = yacc.yacc()

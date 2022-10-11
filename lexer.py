@@ -2,48 +2,42 @@ import ply.lex as lex
 from ply.lex import TOKEN
 
 reserved = {
-   'if' : 'IF',
    'in' : 'IN',
+   'if' : 'IF',
    'else' : 'ELSE',
    'false' : 'FALSE',
    'true' : 'TRUE',
    'or' : 'OR',
    'and' : 'AND',
    'not' : 'NOT',
+   'is' : 'IS',
 }
 
 tokens = [
-   'INT',
-   'FLOAT',
-   'PLUS',
-   'MINUS',
-   'MULT',
-   'DIVIDE',
-   'POW',
-   'MOD',
+   'INT', 'FLOAT',
+   'PLUS', 'MINUS',
+   'MULT', 'DIVIDE',
+   'POW', 'MOD',
 
-   'LPAREN',
-   'RPAREN',
-   'LBRACE',
-   'RBRACE',
-   'LSQUARE',
-   'RSQUARE',
+   'LPAREN', 'RPAREN',
+   'LBRACE', 'RBRACE',
+   'LSQUARE', 'RSQUARE',
 
-#    'RANGE',
-   'COMMA',
-   'COLON',
-   'SEMI',
+   'COMMA', 'COLON', 'SEMI',
 
    'ARROW',
-   'LT',
-   'GT',
-   'LE',
-   'GE',
-   'EQEQ',
-   'NOT_EQ',
+   'LT', 'GT',
+   'LE', 'GE',
+   'EQEQ', 'NOT_EQ',
    'STRING',
    'ID',
+
+   'BIT_OR', 'BIT_AND', 'BIT_XOR',
 ] + list(reserved.values())
+
+t_BIT_OR  = r'\|'
+t_BIT_AND = r'&' 
+t_BIT_XOR = r'\^\^'
 
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
@@ -59,7 +53,6 @@ t_RBRACE  = r'\}'
 t_LSQUARE = r'\['
 t_RSQUARE = r'\]'
 
-# t_RANGE   = r'\.\.'
 t_COMMA   = r','
 t_COLON   = r':'
 t_SEMI    = r';'
