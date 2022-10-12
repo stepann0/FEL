@@ -1,30 +1,20 @@
 import ply.yacc as yacc
 from lexer import tokens
-import exec
 import numpy as np
-
-# precedence = (
-#     ("left", "OR"),
-#     ("left", "AND"),
-#     ("left", "EQEQ", "NOT_EQ"),
-#     ("left", "GT", "GE", "LT", "LE"),
-#     ("left", "PLUS", "MINUS"),
-#     ("left", "MULT", "DIVIDE", "MOD"),
-#     ("right", "POW")
-# )
-
-def p_expression_disj(p):
-    """expression : disjunction"""
-    p[0] = p[1]
+import exec
 
 def p_expression_if_else(p):
     """expression : disjunction IF disjunction ELSE expression"""
     p[0] = p[1] if p[3] else p[5]
 
+def p_expression_disj(p):
+    """expression : disjunction"""
+    p[0] = p[1]
+
 def p_disjunction(p):
     """disjunction : disjunction OR conjunction
                    | conjunction"""
-    if len(p) == 3:
+    if len(p) == 4:
         p[0] = p[1] or p[2]
     else:
         p[0] = p[1]
@@ -170,9 +160,7 @@ def p_number(p):
               | FLOAT"""
     p[0] = p[1]
 
-# Error rule for syntax errors
 def p_error(p):
-    print(f"{' '*p.lexpos}^")
-    exec.error("syntax error:")
+    exec.error("syntax error")
 
 parser = yacc.yacc()
