@@ -45,21 +45,31 @@ def sequence(start, stop):
     if stop < start:
         step = -1
     return sequence_step(start, stop, step)
-    
-def sum_arr(arr):
-    return np.sum(arr)
 
 def call_func(func_id, args):
     try:
         return FUNCTIONS[func_id](*args)
     except (TypeError, ValueError):
-        error(f"error on function '{func_id}' arguments")
+        error(f"error in function '{func_id}' arguments")
     except KeyError:
         error(f"function '{func_id}' not implemented")
 
 FUNCTIONS = {
-    "sum": sum_arr,
+    "sum": np.sum,
     "avr": np.average,
+    "median": np.median,
+    "mean": np.mean,
+    "std": np.std,
+    "var": np.var,
+    "sort": np.sort,
+    "mean": np.mean,
+    "matmul": np.matmul,
+
     "sin": np.sin,
-    "cos": np.cos
+    "cos": np.cos,
+    "tan": np.tan,
+    "hypot": np.hypot,
+    "degrees": np.degrees,
+    "floor": np.floor,
+    "ceil": np.ceil,
 }
