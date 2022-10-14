@@ -1,37 +1,66 @@
-BOLD = "\033[01m"
-RED = "\033[38;05;196m"
-BLUE = "\033[38;05;70m"
-GREEN = "\033[38;05;35m"
-YELLOW = "\033[38;05;227m"
-GRAY = "\033[38;05;244m"
-BOLD_BLUE = "\033[01;38;05;68m"
+PREFIX = "\033["
+BOLD_CODE = "01"
+ITALIC_CODE = "03"
+UNDERLINE_CODE = "04"
+REVERSE_CODE = "07"
+
+JUST_BOLD = "01m"
+RED = "38;05;196m"
+BLUE = "38;05;111m"
+GREEN = "38;05;35m"
+YELLOW = "38;05;227m"
+GRAY = "38;05;244m"
+CYAN = "38;05;85m"
 BACK = "\033[0m"
 
-def reset(color_func):
-    def reset_style(s):
-        return color_func(s) + BACK
-    return reset_style
+style_codes = {
+    "i": ITALIC_CODE,
+    "u": UNDERLINE_CODE,
+    "b": BOLD_CODE,
+    "r": REVERSE_CODE,
+}
 
-@reset
-def bold(s):
-    return BOLD+s
+def apply_styles(color, styles):
+    for s in styles:
+        try:
+            color = style_codes[s]+";"+color
+        except KeyError:
+            continue
+    return color
 
-@reset
-def red(s):
-    return RED+s
+def wrap(color):
+    def func(s, styles=None):
+        if len(s) == 0:
+            return ""
+        if styles:
+            return PREFIX + apply_styles(color(), styles) + s + BACK
+        return PREFIX + color() + s + BACK
+    return func
 
-@reset
-def yellow(s):
-    return YELLOW+s
+@wrap
+def bold(s="", styles=None):
+    return JUST_BOLD
 
-@reset
-def blue(s):
-    return BLUE+s
+@wrap
+def red(s="", styles=None):
+    return RED
 
-@reset
-def bold_blue(s):
-    return BOLD_BLUE+s
+@wrap
+def yellow(s="", styles=None):
+    return YELLOW
 
-@reset
-def dim(s):
-    return GRAY+s
+@wrap
+def blue(s="", styles=None):
+    return BLUE
+
+@wrap
+def green(s="", styles=None):
+    return GREEN
+
+@wrap
+def dim(s="", styles=None):
+    return GRAY
+
+@wrap
+def cyan(s="", styles=None):
+    return CYAN
