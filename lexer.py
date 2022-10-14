@@ -25,7 +25,7 @@ tokens = [
 
    'COMMA', 'COLON', 'SEMI',
 
-   'ARROW',
+   'ARROW', 'RANGE',
    'LT', 'GT',
    'LE', 'GE',
    'EQEQ', 'NOT_EQ',
@@ -54,6 +54,7 @@ t_LSQUARE = r'\['
 t_RSQUARE = r'\]'
 
 t_COMMA   = r','
+t_RANGE   = r'::'
 t_COLON   = r':'
 t_SEMI    = r';'
 

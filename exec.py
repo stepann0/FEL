@@ -1,7 +1,9 @@
 import numpy as np
+import colors
 
 def error(msg):
-    print("\033[31m"+"Error: "+msg+"\033[0m")
+    print(colors.red(f"Error: {msg}"))
+    # print("\033[31m"+"Error: "+msg+"\033[0m")
 
 def describe(obj):
     print(obj, type(obj))
@@ -36,7 +38,7 @@ def bin_op(s1, op, s2):
 
 def sequence_step(start, stop, step):
     try:
-        return list(range(start, stop, step))
+        return np.arange(start, stop, step)
     except Exception:
         error(f"can't generate range {start}:{stop}:{step}.")
 
@@ -64,6 +66,7 @@ FUNCTIONS = {
     "sort": np.sort,
     "mean": np.mean,
     "matmul": np.matmul,
+    "rng" : np.arange,
 
     "sin": np.sin,
     "cos": np.cos,
@@ -72,4 +75,5 @@ FUNCTIONS = {
     "degrees": np.degrees,
     "floor": np.floor,
     "ceil": np.ceil,
+    "pow": np.power,
 }

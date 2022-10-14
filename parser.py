@@ -97,7 +97,6 @@ def p_term(p):
     else:
         p[0] = p[1]
 
-
 def p_factor(p):
     """factor : PLUS factor 
               | MINUS factor 
@@ -125,20 +124,40 @@ def p_atom_bool(p):
     p[0] = p[1] == 'true'
 
 def p_atom_parenth_expr(p):
-    """atom : LPAREN expression RPAREN"""
-    p[0] = p[2]
+    """atom : paren_expression"""
+    p[0] = p[1]
 
-def p_atom_array(p):
-    """atom : array"""
-    p[0] = np.array(p[1])
+def p_atom_array_range(p):
+    """atom : array
+            | range"""
+    p[0] = p[1]
 
 def p_atom_func_call(p):
     """atom : func_call"""
     p[0] = p[1]
 
 def p_array(p):
-    """array : LSQUARE expression_list RSQUARE"""
-    p[0] = p[2]
+    """array : LBRACE expression_list RBRACE"""
+    p[0] = np.array(p[2])
+
+def p_range(p):
+    """range : range_param RANGE range_param RANGE range_param
+             | range_param RANGE range_param"""
+    if len(p) == 4: # start::stop
+        p[0] = exec.sequence(p[1], p[3])
+    else: # start::stop::step
+        p[0] = exec.sequence_step(p[1], p[3], p[5])
+
+def p_range_param(p):
+    """range_param : INT
+                   | func_call
+                   | paren_expression"""
+    p[0] = p[1]
+
+def p_unary_range_param(p):
+    """range_param : MINUS range_param
+                   | PLUS range_param"""
+    p[0] = -p[2] if p[1] == "-" else p[2]
 
 def p_func_call(p):
     """func_call : ID LPAREN expression_list RPAREN"""
@@ -159,6 +178,10 @@ def p_number(p):
     """NUMBER : INT
               | FLOAT"""
     p[0] = p[1]
+
+def p_paren_expression(p):
+    """paren_expression : LPAREN expression RPAREN"""
+    p[0] = p[2]
 
 def p_error(p):
     exec.error("syntax error")

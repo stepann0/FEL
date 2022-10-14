@@ -1,9 +1,11 @@
 from parser import parser
 import readline
+import colors
 
 
 def greet():
-    print("\033[01;38;05;20m"+"FEL. Press Ctrl+D to exit."+"\033[0m")
+    print(colors.blue("FEL. Press Ctrl+D to exit."))
+    # print("\033[01;38;05;20m"+"FEL. Press Ctrl+D to exit."+"\033[0m")
 
 def main():
     greet()
