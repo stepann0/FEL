@@ -3,7 +3,6 @@ import colors
 
 def error(msg):
     print(colors.red(f"Error: {msg}"))
-    # print("\033[31m"+"Error: "+msg+"\033[0m")
 
 def describe(obj):
     print(obj, type(obj))
