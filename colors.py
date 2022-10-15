@@ -22,14 +22,14 @@ style_codes = {
 
 def apply_styles(color, styles):
     for s in styles:
-        try:
+        if s in style_codes:
             color = style_codes[s]+";"+color
-        except KeyError:
-            continue
     return color
 
 def wrap(color):
     def func(s, styles=None):
+        if not isinstance(s, str):
+            s = str(s)
         if len(s) == 0:
             return ""
         if styles:

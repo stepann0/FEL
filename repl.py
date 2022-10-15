@@ -14,7 +14,7 @@ def main():
         except (EOFError, KeyboardInterrupt):
             break
         result = parser.parse(expr)
-        print(result)
+        print(colors.bold(result))
 
 if __name__ == "__main__":
     main()

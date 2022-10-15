@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import tokens
-import numpy as np
+from numpy import array
 import exec
 
 def p_expression_if_else(p):
@@ -138,7 +138,7 @@ def p_atom_func_call(p):
 
 def p_array(p):
     """array : LBRACE expression_list RBRACE"""
-    p[0] = np.array(p[2])
+    p[0] = array(p[2])
 
 def p_range(p):
     """range : range_param RANGE range_param RANGE range_param
