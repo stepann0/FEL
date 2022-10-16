@@ -35,6 +35,16 @@ def bin_op(s1, op, s2):
     elif op == '^':
         return s1 ** s2
 
+def un_operator(op, s):
+    if op == '-':
+        return -s
+    elif op == '+':
+        return s
+    elif op == '!':
+        return np.math.factorial(s)
+    elif op == '√':
+        return np.sqrt(s)
+
 def sequence_step(start, stop, step):
     try:
         return np.arange(start, stop, step)

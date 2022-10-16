@@ -17,7 +17,8 @@ tokens = [
    'INT', 'FLOAT',
    'PLUS', 'MINUS',
    'MULT', 'DIVIDE',
-   'POW', 'MOD',
+   'POW', 'SQRT',
+   'MOD','EPOINT',
 
    'LPAREN', 'RPAREN',
    'LBRACE', 'RBRACE',
@@ -29,8 +30,7 @@ tokens = [
    'LT', 'GT',
    'LE', 'GE',
    'EQEQ', 'NOT_EQ',
-   'STRING',
-   'ID',
+   'ID', 'STRING',
 
    'BIT_OR', 'BIT_AND', 'BIT_XOR',
 ] + list(reserved.values())
@@ -44,6 +44,7 @@ t_MINUS   = r'-'
 t_MULT    = r'\*'
 t_DIVIDE  = r'/'
 t_POW     = r'\^'
+t_SQRT    = r'√'
 t_MOD     = r'%'
 
 t_LPAREN  = r'\('
@@ -65,6 +66,7 @@ t_LE      = r'<='
 t_GE      = r'>='
 t_EQEQ    = r'=='
 t_NOT_EQ  = r'!='
+t_EPOINT  = r'!'
 t_STRING  = r'".*"'
 t_ignore  = ' \t'
 

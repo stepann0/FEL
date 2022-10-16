@@ -100,11 +100,16 @@ def p_term(p):
 def p_factor(p):
     """factor : PLUS factor 
               | MINUS factor 
+              | SQRT factor
               | power"""
     if len(p) == 3:
-        p[0] = -p[2] if p[1] == "-" else p[2]
+        p[0] = exec.un_operator(p[1], p[2])
     else:
         p[0] = p[1]
+
+def p_factor_factorial(p):
+    """factor : factor EPOINT"""
+    p[0] = exec.un_operator(p[2], p[1])
 
 def p_pow(p):
     """power : atom POW factor
@@ -127,10 +132,6 @@ def p_atom_bool(p):
             | FALSE"""
     p[0] = p[1] == 'true'
 
-def p_atom_parenth_expr(p):
-    """atom : paren_expression"""
-    p[0] = p[1]
-
 def p_atom_array_range(p):
     """atom : array
             | range"""
@@ -138,6 +139,10 @@ def p_atom_array_range(p):
 
 def p_atom_func_call(p):
     """atom : func_call"""
+    p[0] = p[1]
+
+def p_atom_parenth_expr(p):
+    """atom : paren_expression"""
     p[0] = p[1]
 
 def p_array(p):
@@ -151,17 +156,6 @@ def p_range(p):
         p[0] = exec.sequence(p[1], p[3])
     else: # start::stop::step
         p[0] = exec.sequence_step(p[1], p[3], p[5])
-
-def p_range_param(p):
-    """range_param : INT
-                   | func_call
-                   | paren_expression"""
-    p[0] = p[1]
-
-def p_unary_range_param(p):
-    """range_param : MINUS range_param
-                   | PLUS range_param"""
-    p[0] = -p[2] if p[1] == "-" else p[2]
 
 def p_func_call(p):
     """func_call : ID LPAREN expression_list RPAREN"""
@@ -177,6 +171,17 @@ def p_expression_list(p):
         p[0] = [p[1]]
     else: # 2+ args, separated by ","
         p[0] = [*p[1], p[3]]
+
+def p_range_param(p):
+    """range_param : INT
+                   | func_call
+                   | paren_expression"""
+    p[0] = p[1]
+
+def p_unary_range_param(p):
+    """range_param : MINUS range_param
+                   | PLUS range_param"""
+    p[0] = -p[2] if p[1] == "-" else p[2]
 
 def p_number(p):
     """NUMBER : INT
