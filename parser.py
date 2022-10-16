@@ -114,6 +114,10 @@ def p_pow(p):
     else:
         p[0] = p[1]
 
+def p_atom_id(p):
+    """atom : ID"""
+    p[0] = p[1]
+
 def p_atom_num(p):
     """atom : NUMBER"""
     p[0] = p[1]

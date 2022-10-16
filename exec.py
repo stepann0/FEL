@@ -57,6 +57,7 @@ def call_func(func_id, args):
 
 FUNCTIONS = {
     "sum": np.sum,
+    "prod": np.prod,
     "avr": np.average,
     "median": np.median,
     "mean": np.mean,
@@ -66,6 +67,8 @@ FUNCTIONS = {
     "mean": np.mean,
     "matmul": np.matmul,
     "rng" : np.arange,
+    "max": np.amax,
+    "min": np.amin,
 
     "sin": np.sin,
     "cos": np.cos,
@@ -75,4 +78,6 @@ FUNCTIONS = {
     "floor": np.floor,
     "ceil": np.ceil,
     "pow": np.power,
+    "factorial": np.math.factorial,
+    "sqrt": np.sqrt,
 }
