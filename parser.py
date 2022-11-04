@@ -150,11 +150,11 @@ def p_array(p):
     p[0] = array(p[2])
 
 def p_range(p):
-    """range : sum RANGE sum RANGE sum
-             | sum RANGE sum"""
+    """range : expression RANGE expression RANGE expression
+             | expression RANGE expression"""
     if len(p) == 4: # start::stop
         p[0] = exec.sequence(p[1], p[3])
-    else: # start::stop::step-
+    else: # start::stop::step
         p[0] = exec.sequence_step(p[1], p[3], p[5])
 
 def p_func_call(p):
