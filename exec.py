@@ -40,10 +40,10 @@ def un_operator(op, s):
         return -s
     elif op == '+':
         return s
-    elif op == '!':
-        return np.math.factorial(s)
     elif op == '√':
         return np.sqrt(s)
+    elif op == '!':
+        return np.math.factorial(s)
 
 def sequence_step(start, stop, step):
     try:

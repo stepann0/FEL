@@ -91,11 +91,16 @@ def p_term(p):
     """term : term MULT factor 
             | term DIVIDE factor 
             | term MOD factor 
-            | factor"""
+            | factor
+            | range"""
     if len(p) == 4:
         p[0] = exec.bin_op(p[1], p[2], p[3])
     else:
         p[0] = p[1]
+
+def p_factor_factorial(p):
+    """factor : factor EPOINT"""
+    p[0] = exec.un_operator(p[2], p[1])
 
 def p_factor(p):
     """factor : PLUS factor 
@@ -106,10 +111,6 @@ def p_factor(p):
         p[0] = exec.un_operator(p[1], p[2])
     else:
         p[0] = p[1]
-
-def p_factor_factorial(p):
-    """factor : factor EPOINT"""
-    p[0] = exec.un_operator(p[2], p[1])
 
 def p_pow(p):
     """power : atom POW factor
@@ -133,8 +134,7 @@ def p_atom_bool(p):
     p[0] = p[1] == 'true'
 
 def p_atom_array_range(p):
-    """atom : array
-            | range"""
+    """atom : array"""
     p[0] = p[1]
 
 def p_atom_func_call(p):
@@ -150,11 +150,11 @@ def p_array(p):
     p[0] = array(p[2])
 
 def p_range(p):
-    """range : range_param RANGE range_param RANGE range_param
-             | range_param RANGE range_param"""
+    """range : sum RANGE sum RANGE sum
+             | sum RANGE sum"""
     if len(p) == 4: # start::stop
         p[0] = exec.sequence(p[1], p[3])
-    else: # start::stop::step
+    else: # start::stop::step-
         p[0] = exec.sequence_step(p[1], p[3], p[5])
 
 def p_func_call(p):
@@ -171,17 +171,6 @@ def p_expression_list(p):
         p[0] = [p[1]]
     else: # 2+ args, separated by ","
         p[0] = [*p[1], p[3]]
-
-def p_range_param(p):
-    """range_param : INT
-                   | func_call
-                   | paren_expression"""
-    p[0] = p[1]
-
-def p_unary_range_param(p):
-    """range_param : MINUS range_param
-                   | PLUS range_param"""
-    p[0] = -p[2] if p[1] == "-" else p[2]
 
 def p_number(p):
     """NUMBER : INT
