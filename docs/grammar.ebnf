@@ -1,0 +1,82 @@
+expression : disjunction IF disjunction ELSE expression
+
+expression : disjunction
+
+disjunction : disjunction OR conjunction
+               | conjunction
+
+conjunction : conjunction AND inversion
+               | inversion
+
+inversion : NOT inversion 
+             | comparison
+
+COMP_OP : EQEQ
+           | NOT_EQ
+           | LE
+           | LT
+           | GE
+           | GT
+           | IN
+           | IS
+
+comparison : comparison COMP_OP bitwise_or
+              | bitwise_or
+
+bitwise_or : bitwise_or BIT_OR bitwise_xor 
+              | bitwise_xor
+
+bitwise_xor : bitwise_xor BIT_XOR bitwise_and 
+               | bitwise_and
+
+bitwise_and : bitwise_and BIT_AND sum 
+               | sum
+
+sum : sum PLUS term 
+       | sum MINUS term 
+       | term
+
+term : term MULT factor 
+        | term DIVIDE factor 
+        | term MOD factor 
+        | factor
+        | range
+
+factor : factor EPOINT
+
+factor : PLUS factor 
+          | MINUS factor 
+          | SQRT factor
+          | power
+
+power : atom POW factor
+         | atom
+
+atom : ID
+
+atom : NUMBER
+
+atom : TRUE 
+        | FALSE
+
+atom : array
+
+atom : func_call
+
+atom : paren_expression
+
+array : LBRACE expression_list RBRACE
+
+range : expression RANGE expression RANGE expression
+         | expression RANGE expression
+
+func_call : ID LPAREN expression_list RPAREN
+
+expression_list : expression_list COMMA expression
+                   | expression
+                   |
+
+NUMBER : INT
+          | FLOAT
+
+paren_expression : LPAREN expression RPAREN
