@@ -1,3 +1,4 @@
+import math
 import numpy as np
 import colors
 
@@ -43,7 +44,7 @@ def un_operator(op, s):
     elif op == '√':
         return np.sqrt(s)
     elif op == '!':
-        return np.math.factorial(s)
+        return math.factorial(s)
 
 def sequence_step(start, stop, step):
     try:
@@ -74,7 +75,6 @@ FUNCTIONS = {
     "std": np.std,
     "var": np.var,
     "sort": np.sort,
-    "mean": np.mean,
     "matmul": np.matmul,
     "rng" : np.arange,
     "max": np.amax,
@@ -88,6 +88,6 @@ FUNCTIONS = {
     "floor": np.floor,
     "ceil": np.ceil,
     "pow": np.power,
-    "factorial": np.math.factorial,
+    "factorial": math.factorial,
     "sqrt": np.sqrt,
 }

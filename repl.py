@@ -1,4 +1,5 @@
 import readline
+from exec import error
 from parser import parser
 import colors
 
@@ -13,8 +14,13 @@ def main():
             expr = input("expr = ")
         except (EOFError, KeyboardInterrupt):
             break
-        result = parser.parse(expr)
-        print(colors.bold(result))
+        try:
+            result = parser.parse(expr)
+            print(colors.bold(result))
+        except Exception as e:
+            error(repr(e))
+            
+
 
 if __name__ == "__main__":
     main()
